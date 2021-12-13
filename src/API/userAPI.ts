@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios'; // AxiosResponse, //, // AxiosInstance, // AxiosError,
+import axios, { AxiosRequestConfig } from 'axios';
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
   config.headers!.Authorization = `Bearer ${localStorage.getItem('token')}`;

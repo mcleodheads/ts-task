@@ -1,12 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
-import thunk from 'redux-thunk';
 import userReducer from './reducers/userReducer';
+import tableReducer from './reducers/tableReducer';
+
+// const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer: {
     userReducer,
+    tableReducer,
   },
-  middleware: [thunk],
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

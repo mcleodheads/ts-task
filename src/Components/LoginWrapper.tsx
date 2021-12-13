@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -12,15 +12,26 @@ import {
   Select,
   Typography,
 } from '@mui/material';
-import { UseAppDispatch } from '../../Hooks/storeHooks';
-import { loginRequest } from '../../Store/reducers/userReducer';
-import { IUserAuthRequest } from '../../Types/userTypes/Users';
+import { useHistory } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../Hooks/storeHooks';
+import { loginRequest } from '../Store/reducers/userReducer';
+import { IUserAuthRequest } from '../Types/userTypes/Users';
+import { HOME_ROUTE } from '../Routing/constants';
 
 const LoginWrapper: React.FC = () => {
-  const [login, setLogin] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [language, setLanguage] = React.useState('en');
-  const dispatch = UseAppDispatch();
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+  const [language, setLanguage] = useState('en');
+  const dispatch = useAppDispatch();
+
+  const history = useHistory();
+  const { isAuth } = useAppSelector((state) => state.userReducer);
+
+  useEffect(() => {
+    if (isAuth) {
+      history.push(HOME_ROUTE);
+    }
+  }, [history, isAuth]);
 
   function handleLogin() {
     const userAuthData: IUserAuthRequest = { login, password, language };
