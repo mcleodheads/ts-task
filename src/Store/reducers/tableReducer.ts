@@ -2,8 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import tableAPI from '../../API/tableAPI';
 
-const initialState = {
+const initialState: any = {
   configuration: [],
+  activeCategory: [],
   searchingResults: {
     items: [],
   },
@@ -38,7 +39,11 @@ export const searchRequest = createAsyncThunk(
 const tableReducer = createSlice({
   name: 'tableReducer',
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveCategory(state, action) {
+      state.activeCategory = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(configurationRequest.pending, (state) => {
       state.isLoading = true;
@@ -68,4 +73,5 @@ const tableReducer = createSlice({
   },
 });
 
+export const { setActiveCategory } = tableReducer.actions;
 export default tableReducer.reducer;

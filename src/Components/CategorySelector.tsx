@@ -3,13 +3,21 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../Hooks/storeHooks';
 import { IConfiguration } from '../Types/TableTypes/TableTypes';
-import { searchRequest } from '../Store/reducers/tableReducer';
+import {
+  searchRequest,
+  setActiveCategory,
+} from '../Store/reducers/tableReducer';
 
 const CategorySelector: React.FC = () => {
   const [value, setValue] = useState<string>('');
   const { configuration } = useAppSelector((state) => state.tableReducer);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+
+  const handleSetActiveCategory = (category: IConfiguration) => {
+    dispatch(setActiveCategory(category));
+    dispatch(searchRequest(category.name));
+  };
 
   return (
     <Box sx={{ minWidth: 200 }} style={{ margin: 20 }}>
@@ -29,7 +37,7 @@ const CategorySelector: React.FC = () => {
           {configuration.map((category: IConfiguration) => (
             <MenuItem
               key={category.name}
-              onClick={() => dispatch(searchRequest(category.name))}
+              onClick={() => handleSetActiveCategory(category)}
               value={category.name}
             >
               {`${t(category.name)}`}
