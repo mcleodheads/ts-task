@@ -2,8 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './reducers/userReducer';
 import tableReducer from './reducers/tableReducer';
 
-// const sagaMiddleware = createSagaMiddleware();
-
 const store = configureStore({
   reducer: {
     userReducer,

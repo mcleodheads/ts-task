@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import tableAPI from '../../API/tableAPI';
+import { ITable } from '../../Types/TableTypes/TableTypes';
 
-const initialState: any = {
+const initialState: ITable = {
   configuration: [],
-  activeCategory: [],
+  activeCategory: { name: '', columns: [] },
   searchingResults: {
     items: [],
   },

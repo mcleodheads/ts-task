@@ -14,7 +14,7 @@ const Table: React.FC = () => {
   return (
     <div>
       <CategorySelector />
-      {activeCategory.length !== 0 ? (
+      {activeCategory?.name !== '' ? (
         <div>
           <TableData />
         </div>

@@ -34,7 +34,7 @@ const CategorySelector: React.FC = () => {
           id="demo-simple-select"
           label="Category"
         >
-          {configuration.map((category: IConfiguration) => (
+          {configuration?.map((category: IConfiguration) => (
             <MenuItem
               key={category.name}
               onClick={() => handleSetActiveCategory(category)}

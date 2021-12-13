@@ -6,7 +6,9 @@ axios.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 function fetchConfiguration() {
-  return axios.get('/api/appConfiguration', { withCredentials: true });
+  return axios.get('/api/appConfiguration', {
+    withCredentials: true,
+  });
 }
 
 function fetchSearchResult(name: string) {
@@ -14,7 +16,9 @@ function fetchSearchResult(name: string) {
     filter: {},
     sort: {},
   };
-  return axios.post(`/api/${name}/search`, data, { withCredentials: true });
+  return axios.post(`/api/${name}/search`, data, {
+    withCredentials: true,
+  });
 }
 
 function fetchSelectorData(name: string, field: string) {

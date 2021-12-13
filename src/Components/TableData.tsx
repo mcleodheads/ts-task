@@ -12,7 +12,7 @@ const TableData: React.FC = () => {
 
   const columns = useMemo(
     () =>
-      activeCategory.columns.map((item: { name: string }) => {
+      activeCategory!.columns.map((item: { name: string }) => {
         return {
           Header: `${t(item.name)}`,
           accessor: item.name,
@@ -22,7 +22,7 @@ const TableData: React.FC = () => {
   );
 
   const data = useMemo(() => {
-    return searchingResults.items;
+    return searchingResults?.items;
   }, [searchingResults]);
 
   const defaultColumn = React.useMemo(
