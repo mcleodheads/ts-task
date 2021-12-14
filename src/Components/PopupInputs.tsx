@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../Hooks/storeHooks';
 
 interface Props {
-  setValue: (e?: any) => void;
-  value: string;
+  setValue: (e?: string | boolean | undefined) => void;
+  value: string | boolean | undefined;
   type: string;
   column: any;
 }

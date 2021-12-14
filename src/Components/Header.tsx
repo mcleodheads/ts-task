@@ -14,6 +14,11 @@ const countryFlags = [
   { key: 'ru', value: 'ru', flag: 'ru', text: 'Русский' },
 ];
 
+interface HandleLangChangeParams {
+  e: React.SyntheticEvent<HTMLElement>;
+  value: string | undefined;
+}
+
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -23,8 +28,8 @@ const Header: React.FC = () => {
     dispatch(logoutRequest());
   }
 
-  const handleLangChange = (e: any, data: any) => {
-    i18next.changeLanguage(data.value);
+  const handleLangChange = ({ value }: HandleLangChangeParams) => {
+    i18next.changeLanguage(value).catch((e) => new Error(e));
   };
 
   return (
@@ -41,7 +46,9 @@ const Header: React.FC = () => {
           item
           placeholder={Cookies.get('i18next')}
           options={countryFlags}
-          onChange={handleLangChange}
+          onChange={(e, { value }) =>
+            handleLangChange({ e, value } as HandleLangChangeParams)
+          }
         />
         <Menu.Item
           name={`${t('exit')}`}

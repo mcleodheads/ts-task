@@ -12,7 +12,7 @@ interface Props {
   onClose: () => void;
   row: any;
   activeCategory: IActiveCategory;
-  chosenCell: any;
+  chosenCell: ICell;
 }
 
 const ModalTable: React.FC<Props> = ({
@@ -42,7 +42,7 @@ const ModalTable: React.FC<Props> = ({
               {chosenCell.row.cells.map((cell: ICell) => (
                 <div className="single-input" key={cell.column.id}>
                   {t(cell.column.Header)}
-                  <ModalInput type={cell.value} cell={cell} />
+                  <ModalInput type={cell.column.type} cell={cell} />
                 </div>
               ))}
             </div>

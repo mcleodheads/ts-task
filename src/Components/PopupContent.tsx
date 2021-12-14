@@ -10,7 +10,7 @@ interface Props {
 }
 
 const PopupContent: React.FC<Props> = ({ column }) => {
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = useState<string | boolean | undefined>();
   const dispatch = useAppDispatch();
   const { activeCategory } = useAppSelector((state) => state.tableReducer);
 

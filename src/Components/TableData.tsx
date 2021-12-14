@@ -14,7 +14,11 @@ import '../Assets/index.css';
 const TableData: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [chosenRow, setChosenRow] = useState({});
-  const [chosenCell, setChosenCell] = useState({});
+  const [chosenCell, setChosenCell] = useState<ICell>({
+    value: '',
+    column: {},
+    row: {},
+  });
   const { t } = useTranslation();
   const { activeCategory } = useAppSelector((state) => state.tableReducer);
   const { searchingResults } = useAppSelector((state) => state.tableReducer);
