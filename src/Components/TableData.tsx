@@ -1,6 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimmer, Icon, Loader, Popup, Segment, Table } from 'semantic-ui-react';
+import {
+  Dimmer,
+  Divider,
+  Icon,
+  Loader,
+  Popup,
+  Segment,
+  Table,
+} from 'semantic-ui-react';
 import { Row, useFlexLayout, useResizeColumns, useTable } from 'react-table';
 
 import { useAppDispatch, useAppSelector } from '../Hooks/storeHooks';
@@ -82,7 +90,7 @@ const TableData: React.FC = () => {
           </Dimmer>
         </Segment>
       ) : (
-        <Table selectable celled {...getTableProps()}>
+        <Table className="table" selectable celled {...getTableProps()}>
           <Table.Header>
             {headerGroups.map((headerGroup) => (
               <Table.Row {...headerGroup.getHeaderGroupProps()}>
@@ -99,6 +107,7 @@ const TableData: React.FC = () => {
                           <Icon className="table-popup-trigger" name="filter" />
                         }
                       />
+                      <Divider className="table-divider" />
                     </div>
                   </Table.HeaderCell>
                 ))}

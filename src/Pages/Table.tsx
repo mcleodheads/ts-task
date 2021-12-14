@@ -13,10 +13,10 @@ const Table: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <div style={{ width: '100vw' }}>
       <CategorySelector />
       {activeCategory?.name !== '' ? (
-        <div>
+        <div style={{ width: '100%' }}>
           <TableData />
         </div>
       ) : null}
