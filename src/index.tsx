@@ -1,14 +1,16 @@
 import * as React from 'react';
+import { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import HttpApi from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { initReactI18next } from 'react-i18next';
-import { Suspense } from 'react';
+
 import store from './Store/indexStore';
 import App from './App';
+
 import 'semantic-ui-css/semantic.min.css';
 import './Assets/index.css';
 

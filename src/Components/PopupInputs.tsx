@@ -1,7 +1,8 @@
-import { Input } from '@mui/material';
 import React from 'react';
+import { Input } from '@mui/material';
 import { Form, Loader, Segment, Checkbox } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
+
 import { useAppSelector } from '../Hooks/storeHooks';
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
   column: any;
 }
 
-const PopupInputs = ({ setValue, value, type, column }: Props) => {
+const PopupInputs: React.FC<Props> = ({ setValue, value, type, column }) => {
   const { t } = useTranslation();
   const { filteredItems } = useAppSelector((state) => state.tableReducer);
   switch (type) {

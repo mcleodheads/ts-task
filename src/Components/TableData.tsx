@@ -2,13 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimmer, Icon, Loader, Popup, Segment, Table } from 'semantic-ui-react';
 import { Row, useFlexLayout, useResizeColumns, useTable } from 'react-table';
+
 import { useAppDispatch, useAppSelector } from '../Hooks/storeHooks';
 import ModalTable from './ModalTable';
-
-import '../Assets/index.css';
 import PopupContent from './PopupContent';
 import { popupRequest } from '../Store/reducers/tableReducer';
 import { ICell } from '../Types/TableTypes/TableTypes';
+
+import '../Assets/index.css';
 
 const TableData: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);

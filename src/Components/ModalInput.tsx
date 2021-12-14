@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Checkbox, Dropdown, Input } from 'semantic-ui-react';
 
 interface Props {
@@ -6,7 +7,7 @@ interface Props {
   cell: any;
 }
 
-const ModalInput = ({ type, cell }: Props) => {
+const ModalInput: React.FC<Props> = ({ type, cell }) => {
   switch (type) {
     case 'Boolean':
       return <Checkbox defaultChecked={cell.value} toggle />;

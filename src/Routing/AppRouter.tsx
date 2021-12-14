@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+
 import { authRoutes, publicRoutes } from './routes';
 import { useAppSelector } from '../Hooks/storeHooks';
 import { LOGIN_ROUTE } from './constants';

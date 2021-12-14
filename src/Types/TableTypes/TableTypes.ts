@@ -21,6 +21,7 @@ export interface IColumns {
   name: string;
   displayNameKey: string;
   type: string;
+  id: string;
 }
 
 export interface ISearchingResults {

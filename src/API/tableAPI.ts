@@ -1,17 +1,22 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import {
+  IConfiguration,
+  IFilter,
+  ISearchingResults,
+} from '../Types/TableTypes/TableTypes';
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
   config.headers!.Authorization = `Bearer ${localStorage.getItem('token')}`;
   return config;
 });
 
-function fetchConfiguration() {
+function fetchConfiguration(): Promise<IConfiguration[]> {
   return axios.get('/api/appConfiguration', {
     withCredentials: true,
   });
 }
 
-function fetchSearchResult(name: string) {
+function fetchSearchResult(name: string): Promise<ISearchingResults> {
   const data = {
     filter: {},
     sort: {},
@@ -21,7 +26,7 @@ function fetchSearchResult(name: string) {
   });
 }
 
-function fetchSelectorData(name: string, field: string) {
+function fetchSelectorData(name: string, field: string): Promise<IFilter> {
   const config = {
     filter: {},
     skip: 0,
@@ -33,11 +38,14 @@ function fetchSelectorData(name: string, field: string) {
   });
 }
 
-function fetchById(name: string, id: string) {
+function fetchById(name: string, id: string): Promise<any> {
   return axios.get(`/api/${name}/getById/${id}`, { withCredentials: true });
 }
 
-function fetchPopupData(name: string, config: { filter: any }) {
+function fetchPopupData(
+  name: string,
+  config: { filter: any }
+): Promise<IFilter> {
   return axios.post(`/api/${name}/ids`, config, { withCredentials: true });
 }
 
