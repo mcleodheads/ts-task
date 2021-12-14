@@ -10,6 +10,7 @@ import { Suspense } from 'react';
 import store from './Store/indexStore';
 import App from './App';
 import 'semantic-ui-css/semantic.min.css';
+import './Assets/index.css';
 
 i18n
   .use(HttpApi)

@@ -33,6 +33,20 @@ function fetchSelectorData(name: string, field: string) {
   });
 }
 
-const tableAPI = { fetchConfiguration, fetchSearchResult, fetchSelectorData };
+function fetchById(name: string, id: string) {
+  return axios.get(`/api/${name}/getById/${id}`, { withCredentials: true });
+}
+
+function fetchPopupData(name: string, config: { filter: any }) {
+  return axios.post(`/api/${name}/ids`, config, { withCredentials: true });
+}
+
+const tableAPI = {
+  fetchConfiguration,
+  fetchSearchResult,
+  fetchSelectorData,
+  fetchById,
+  fetchPopupData,
+};
 
 export default tableAPI;

@@ -1,24 +1,40 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
-import { useFlexLayout, useResizeColumns, useTable } from 'react-table';
-import { useAppSelector } from '../Hooks/storeHooks';
+import { Dimmer, Icon, Loader, Popup, Segment, Table } from 'semantic-ui-react';
+import { Row, useFlexLayout, useResizeColumns, useTable } from 'react-table';
+import { useAppDispatch, useAppSelector } from '../Hooks/storeHooks';
+import ModalTable from './ModalTable';
+
+import '../Assets/index.css';
+import PopupContent from './PopupContent';
+import { popupRequest } from '../Store/reducers/tableReducer';
 
 const TableData: React.FC = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [chosenRow, setChosenRow] = useState({});
+  const [chosenCell, setChosenCell] = useState({});
   const { t } = useTranslation();
   const { activeCategory } = useAppSelector((state) => state.tableReducer);
   const { searchingResults } = useAppSelector((state) => state.tableReducer);
   const { isLoading } = useAppSelector((state) => state.tableReducer);
+  const { filteredItems } = useAppSelector((state) => state.tableReducer);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const config = { filter: {} };
+    dispatch(popupRequest({ name: activeCategory.name, config }));
+  }, [activeCategory]);
 
   const columns = useMemo(
     () =>
-      activeCategory!.columns.map((item: { name: string }) => {
+      activeCategory?.columns.map((item: { name: string; type: string }) => {
         return {
           Header: `${t(item.name)}`,
           accessor: item.name,
+          type: item.type,
         };
       }),
-    [t, activeCategory]
+    [activeCategory?.columns, t]
   );
 
   const data = useMemo(() => {
@@ -45,8 +61,14 @@ const TableData: React.FC = () => {
       useFlexLayout
     );
 
+  const modalCaller = (cell: any) => {
+    setModalOpen(true);
+    setChosenRow(cell.row.original);
+    setChosenCell(cell);
+  };
+
   return (
-    <>
+    <div className="table-wrapper">
       {isLoading ? (
         <Segment>
           <Dimmer active inverted>
@@ -60,38 +82,65 @@ const TableData: React.FC = () => {
               <Table.Row {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((col) => (
                   <Table.HeaderCell {...col.getHeaderProps()}>
-                    {col.render('Header')}
+                    <div className="headerTable">
+                      {col.render('Header')}
+                      <Popup
+                        content={<PopupContent column={col} />}
+                        pinned
+                        on="click"
+                        position="top right"
+                        trigger={
+                          <Icon className="table-popup-trigger" name="filter" />
+                        }
+                      />
+                    </div>
                   </Table.HeaderCell>
                 ))}
               </Table.Row>
             ))}
           </Table.Header>
           <Table.Body {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <Table.Row {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <Table.Cell {...cell.getCellProps()}>
-                      {/* eslint-disable-next-line no-nested-ternary */}
-                      {cell.value !== null
-                        ? cell.value?.name !== undefined
-                          ? `${t(cell.value?.name)}`
-                          : `${
-                              Array.isArray(cell.value)
-                                ? cell.value.map((item) => item.name)
-                                : `${t(cell.value)}`
-                            }`
-                        : `${t('emptyValue')}`}
-                    </Table.Cell>
-                  ))}
-                </Table.Row>
-              );
-            })}
+            {rows
+              .filter((row: Row<any>) => {
+                return filteredItems.data.includes(row.original.id);
+              })
+              .map((row) => {
+                prepareRow(row);
+                return (
+                  <Table.Row {...row.getRowProps()}>
+                    {row.cells.map((cell) => (
+                      <Table.Cell
+                        {...cell.getCellProps()}
+                        onClick={() => modalCaller(cell)}
+                      >
+                        {/* eslint-disable-next-line no-nested-ternary */}
+                        {cell.value !== null
+                          ? cell.value?.name !== undefined
+                            ? `${t(cell.value?.name)}`
+                            : `${
+                                Array.isArray(cell.value)
+                                  ? cell.value.map((item) => item.name)
+                                  : `${t(cell.value)}`
+                              }`
+                          : `${t('emptyValue')}`}
+                      </Table.Cell>
+                    ))}
+                  </Table.Row>
+                );
+              })}
           </Table.Body>
         </Table>
       )}
-    </>
+      {modalOpen ? (
+        <ModalTable
+          chosenCell={chosenCell}
+          activeCategory={activeCategory}
+          row={chosenRow}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      ) : null}
+    </div>
   );
 };
 

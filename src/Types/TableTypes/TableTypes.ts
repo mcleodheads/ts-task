@@ -1,9 +1,11 @@
 export interface ITable {
   configuration?: IConfiguration[] | null;
-  activeCategory?: IActiveCategory;
+  activeCategory: IActiveCategory;
   searchingResults?: ISearchingResults;
   isLoading: boolean;
   error: string;
+  filteredItems: IFilter;
+  modalItem: any;
 }
 
 export interface IConfiguration {
@@ -24,4 +26,16 @@ export interface IColumns {
 export interface ISearchingResults {
   totalCount?: number;
   items: any;
+}
+
+export interface IFilter {
+  data: string[];
+  selectorsIsLoading: boolean;
+  selectorFields?: string[];
+  emptyResponse: boolean;
+}
+
+export interface ICell {
+  value: string;
+  column: any;
 }
