@@ -38,4 +38,5 @@ export interface IFilter {
 export interface ICell {
   value: string;
   column: any;
+  row: any;
 }

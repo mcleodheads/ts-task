@@ -8,6 +8,7 @@ import ModalTable from './ModalTable';
 import '../Assets/index.css';
 import PopupContent from './PopupContent';
 import { popupRequest } from '../Store/reducers/tableReducer';
+import { ICell } from '../Types/TableTypes/TableTypes';
 
 const TableData: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -23,7 +24,7 @@ const TableData: React.FC = () => {
   useEffect(() => {
     const config = { filter: {} };
     dispatch(popupRequest({ name: activeCategory.name, config }));
-  }, [activeCategory]);
+  }, [activeCategory, dispatch]);
 
   const columns = useMemo(
     () =>
@@ -61,7 +62,7 @@ const TableData: React.FC = () => {
       useFlexLayout
     );
 
-  const modalCaller = (cell: any) => {
+  const modalCaller = (cell: ICell) => {
     setModalOpen(true);
     setChosenRow(cell.row.original);
     setChosenCell(cell);

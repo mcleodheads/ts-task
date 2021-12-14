@@ -14,11 +14,15 @@ interface Props {
 const PopupInputs = ({ setValue, value, type, column }: Props) => {
   const { t } = useTranslation();
   const { filteredItems } = useAppSelector((state) => state.tableReducer);
-
+  console.log(type);
   switch (type) {
     case 'Date':
       return (
-        <Input onChange={setValue} value={value} placeholder="dd.mm.yyyy" />
+        <Input
+          onChange={(e) => setValue(e.target.value)}
+          value={value}
+          placeholder="dd.mm.yyyy"
+        />
       );
 
     case 'Number':
