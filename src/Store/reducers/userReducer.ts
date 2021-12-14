@@ -21,22 +21,15 @@ export const loginRequest = createAsyncThunk(
   }
 );
 
-export const logoutRequest = createAsyncThunk(
-  'logout',
-  async (_, { rejectWithValue }) => {
-    try {
-      return localStorage.removeItem('token');
-    } catch (e) {
-      const error = e as Error;
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
 const userReducer = createSlice({
   name: 'userReducer',
   initialState,
-  reducers: {},
+  reducers: {
+    logoutRequest(state) {
+      localStorage.removeItem('token');
+      state.isAuth = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loginRequest.pending, (state: IUserStatus) => {
       state.isLoading = true;
@@ -57,10 +50,7 @@ const userReducer = createSlice({
         state.isLoading = false;
       }
     );
-    builder.addCase(logoutRequest.fulfilled, (state: IUserStatus) => {
-      state.isAuth = false;
-    });
   },
 });
-
+export const { logoutRequest } = userReducer.actions;
 export default userReducer.reducer;
