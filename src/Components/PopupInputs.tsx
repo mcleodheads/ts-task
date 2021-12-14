@@ -14,7 +14,6 @@ interface Props {
 const PopupInputs = ({ setValue, value, type, column }: Props) => {
   const { t } = useTranslation();
   const { filteredItems } = useAppSelector((state) => state.tableReducer);
-  console.log(type);
   switch (type) {
     case 'Date':
       return (

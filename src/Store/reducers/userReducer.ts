@@ -6,7 +6,6 @@ import userAPI from '../../API/userAPI';
 const initialState: IUserStatus = {
   isAuth: !!localStorage.getItem('token'),
   isLoading: false,
-  data: {},
 };
 
 export const loginRequest = createAsyncThunk(
