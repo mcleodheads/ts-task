@@ -86,12 +86,12 @@ const TableData: React.FC = () => {
           <Table.Header>
             {headerGroups.map((headerGroup) => (
               <Table.Row {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((col) => (
-                  <Table.HeaderCell {...col.getHeaderProps()}>
+                {headerGroup.headers.map((column) => (
+                  <Table.HeaderCell {...column.getHeaderProps()}>
                     <div className="headerTable">
-                      {col.render('Header')}
+                      {column.render('Header')}
                       <Popup
-                        content={<PopupContent column={col} />}
+                        content={<PopupContent column={column} />}
                         pinned
                         on="click"
                         position="top right"

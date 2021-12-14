@@ -59,7 +59,7 @@ export const forSelectRequest = createAsyncThunk(
 
 export const popupRequest = createAsyncThunk(
   'popupRequest',
-  async (data: { name: string; config: { filter: any } }, thunkAPI) => {
+  async (data: { name: string; config: { filter: unknown } }, thunkAPI) => {
     try {
       const { name, config } = data;
       return await tableAPI.fetchPopupData(name, config);

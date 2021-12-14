@@ -5,7 +5,7 @@ export interface ITable {
   isLoading: boolean;
   error: string;
   filteredItems: IFilter;
-  modalItem: any;
+  modalItem: unknown;
 }
 
 export interface IConfiguration {
