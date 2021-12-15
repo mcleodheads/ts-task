@@ -33,12 +33,10 @@ body {
 .table-divider {
     display: inline-block;
     width: 10px;
-    margin-top: -1px;
     height: 10px;
     position: absolute;
     right: 0;
     top: 0;
-    background-color: black;
     transform: translateX(50%);
     z-index: 1;
     touch-action: none;

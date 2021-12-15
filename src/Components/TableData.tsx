@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 import { Row, useFlexLayout, useResizeColumns, useTable } from 'react-table';
 
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAppDispatch, useAppSelector } from '../Hooks/storeHooks';
 import ModalTable from './ModalTable';
 import PopupContent from './PopupContent';
@@ -20,6 +21,12 @@ import { ICell } from '../Types/TableTypes/TableTypes';
 import '../Assets/index.css';
 
 const TableData: React.FC = () => {
+  const { activeCategory } = useAppSelector((state) => state.tableReducer);
+  const { searchingResults } = useAppSelector((state) => state.tableReducer);
+  const { isLoading } = useAppSelector((state) => state.tableReducer);
+  const { filteredItems } = useAppSelector((state) => state.tableReducer);
+  const [scrollingData, setScrollingData] = useState(searchingResults?.items);
+  const [start, setStart] = useState(20);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [chosenRow, setChosenRow] = useState({});
   const [chosenCell, setChosenCell] = useState<ICell>({
@@ -28,16 +35,24 @@ const TableData: React.FC = () => {
     row: {},
   });
   const { t } = useTranslation();
-  const { activeCategory } = useAppSelector((state) => state.tableReducer);
-  const { searchingResults } = useAppSelector((state) => state.tableReducer);
-  const { isLoading } = useAppSelector((state) => state.tableReducer);
-  const { filteredItems } = useAppSelector((state) => state.tableReducer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    setStart(20);
     const config = { filter: {} };
     dispatch(popupRequest({ name: activeCategory.name, config }));
   }, [activeCategory, dispatch]);
+
+  const updateNextData = () => {
+    if (searchingResults?.items.length >= start + 3) {
+      setScrollingData(
+        scrollingData.concat(
+          Array.from(searchingResults?.items.slice(start, start + 3))
+        )
+      );
+    }
+    setStart((prev) => prev + 3);
+  };
 
   const columns = useMemo(
     () =>
@@ -52,8 +67,8 @@ const TableData: React.FC = () => {
   );
 
   const data = useMemo(() => {
-    return searchingResults?.items;
-  }, [searchingResults]);
+    return [...searchingResults?.items.slice(0, 20), ...scrollingData];
+  }, [scrollingData, searchingResults?.items]);
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -75,6 +90,8 @@ const TableData: React.FC = () => {
       useFlexLayout
     );
 
+  console.log(rows);
+
   const modalCaller = (cell: ICell) => {
     setModalOpen(true);
     setChosenRow(cell.row.original);
@@ -85,66 +102,80 @@ const TableData: React.FC = () => {
     <div className="table-wrapper">
       {isLoading ? (
         <Segment>
-          <Dimmer active inverted>
-            <Loader inverted>Loading</Loader>
+          <Dimmer inverted>
+            <Loader active>{t('data_loading')}</Loader>
           </Dimmer>
         </Segment>
       ) : (
-        <Table className="table" selectable celled {...getTableProps()}>
-          <Table.Header>
-            {headerGroups.map((headerGroup) => (
-              <Table.Row {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Table.HeaderCell {...column.getHeaderProps()}>
-                    <div className="headerTable">
-                      {column.render('Header')}
-                      <Popup
-                        content={<PopupContent column={column} />}
-                        pinned
-                        on="click"
-                        position="top right"
-                        trigger={
-                          <Icon className="table-popup-trigger" name="filter" />
-                        }
-                      />
-                      <Divider className="table-divider" />
-                    </div>
-                  </Table.HeaderCell>
-                ))}
-              </Table.Row>
-            ))}
-          </Table.Header>
-          <Table.Body {...getTableBodyProps()}>
-            {rows
-              .filter((row: Row<any>) => {
-                return filteredItems.data.includes(row.original.id);
-              })
-              .map((row) => {
-                prepareRow(row);
-                return (
-                  <Table.Row {...row.getRowProps()}>
-                    {row.cells.map((cell) => (
-                      <Table.Cell
-                        {...cell.getCellProps()}
-                        onClick={() => modalCaller(cell)}
-                      >
-                        {/* eslint-disable-next-line no-nested-ternary */}
-                        {cell.value !== null
-                          ? cell.value?.name !== undefined
-                            ? `${t(cell.value?.name)}`
-                            : `${
-                                Array.isArray(cell.value)
-                                  ? cell.value.map((item) => item.name)
-                                  : `${t(cell.value)}`
-                              }`
-                          : `${t('emptyValue')}`}
-                      </Table.Cell>
-                    ))}
-                  </Table.Row>
-                );
-              })}
-          </Table.Body>
-        </Table>
+        <InfiniteScroll
+          next={updateNextData}
+          hasMore
+          loader={
+            <Dimmer inverted>
+              <Loader active>{t('data_loading')}</Loader>
+            </Dimmer>
+          }
+          dataLength={rows.length}
+        >
+          <Table className="table" selectable celled {...getTableProps()}>
+            <Table.Header>
+              {headerGroups.map((headerGroup) => (
+                <Table.Row {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <Table.HeaderCell {...column.getHeaderProps()}>
+                      <div className="headerTable">
+                        {column.render('Header')}
+                        <Popup
+                          content={<PopupContent column={column} />}
+                          pinned
+                          on="click"
+                          position="top right"
+                          trigger={
+                            <Icon
+                              className="table-popup-trigger"
+                              name="filter"
+                            />
+                          }
+                        />
+                        <Divider className="table-divider" />
+                      </div>
+                    </Table.HeaderCell>
+                  ))}
+                </Table.Row>
+              ))}
+            </Table.Header>
+            <Table.Body {...getTableBodyProps()}>
+              {rows
+                .filter((row: Row<any>) => {
+                  return filteredItems.data.includes(row.original.id);
+                })
+                .map((row) => {
+                  prepareRow(row);
+                  return (
+                    <Table.Row {...row.getRowProps()}>
+                      {row.cells.map((cell) => (
+                        <Table.Cell
+                          {...cell.getCellProps()}
+                          onClick={() => modalCaller(cell)}
+                        >
+                          {/* eslint-disable-next-line no-nested-ternary */}
+                          {cell.value !== null
+                            ? cell.value?.name !== undefined
+                              ? `${t(cell.value?.name)}`
+                              : `${
+                                  Array.isArray(cell.value)
+                                    ? cell.value.map((item) => item.name)
+                                    : `${t(cell.value)}`
+                                }`
+                            : `${t('emptyValue')}`}
+                        </Table.Cell>
+                      ))}
+                    </Table.Row>
+                  );
+                })}
+            </Table.Body>
+          </Table>
+        </InfiniteScroll>
       )}
       {modalOpen ? (
         <ModalTable
