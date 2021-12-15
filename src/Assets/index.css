@@ -31,14 +31,15 @@ body {
 }
 
 .table-divider {
+    background-color: black;
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 5px;
+    margin-top: -10px;
+    height: calc(100% + 10px);
     position: absolute;
     right: 0;
     top: 0;
     transform: translateX(50%);
-    z-index: 1;
-    touch-action: none;
+    z-index: 2;
     cursor: col-resize;
 }
