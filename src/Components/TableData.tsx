@@ -90,8 +90,6 @@ const TableData: React.FC = () => {
       useFlexLayout
     );
 
-  console.log(rows);
-
   const modalCaller = (cell: ICell) => {
     setModalOpen(true);
     setChosenRow(cell.row.original);
@@ -137,7 +135,10 @@ const TableData: React.FC = () => {
                             />
                           }
                         />
-                        <Divider className="table-divider" />
+                        <Divider
+                          className="table-divider"
+                          {...column.getResizerProps()}
+                        />
                       </div>
                     </Table.HeaderCell>
                   ))}
